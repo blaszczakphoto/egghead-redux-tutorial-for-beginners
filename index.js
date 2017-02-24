@@ -13,13 +13,24 @@ const counter = (state = 0, action) => {
   }
 }
 
-expect(
-  counter(0, { type: 'INCREMENT' })
-).toEqual(1);
+const store = createStore(counter);
 
-expect(
-  counter(1, { type: 'INCREMENT' })
-).toEqual(2);
+console.log(store.getState());
 
-console.log("test passed!")
+store.dispatch({ type: 'INCREMENT' });
+
+console.log(store.getState());
+
+const render = () => {
+  document.body.innerText = store.getState();
+}
+
+store.subscribe(() => {
+  render();
+})
+render();
+
+document.body.addEventListener('click', (event) => {
+  store.dispatch({ type: 'INCREMENT' });
+})
 
