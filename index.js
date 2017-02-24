@@ -1,18 +1,34 @@
 import expect from 'expect'
 import deepFreeze from 'deep-freeze'
 
-const addTodo = (state = [], action) => {
-  return [
-    ...state,
-    {
-      id: action.id,
-      title: action.title,
-      completed: false
-    }
-  ]
+const todos = (state = [], action) => {
+  switch (action.type) {
+    case 'ADD_TODO':
+      return [
+        ...state,
+        {
+          id: action.id,
+          title: action.title,
+          completed: false
+        }
+      ]
+    case 'TOGGLE_TODO':
+      return state.map(todo => {
+        if (todo.id !== action.id) {
+          return todo;
+        }
+
+        return {
+          ...todo,
+          completed: !todo.completed
+        };
+      })
+    default:
+      return state;
+  }
 }
 
-const test = () => {
+const testAddTodo = () => {
   const before = [];
   const after = [
     {
@@ -29,8 +45,44 @@ const test = () => {
 
   deepFreeze(before);
   deepFreeze(action);
-  expect(addTodo(before, action)).toEqual(after);
+  expect(todos(before, action)).toEqual(after);
 }
 
-test();
+const testToggleTodo = () => {
+  const before = [
+    {
+      id: 0,
+      title: 'Learn Redux',
+      completed: false
+    },
+    {
+      id: 1,
+      title: 'Go jogging',
+      completed: false
+    }
+  ];
+  const after = [
+    {
+      id: 0,
+      title: 'Learn Redux',
+      completed: false
+    },
+    {
+      id: 1,
+      title: 'Go jogging',
+      completed: true
+    }
+  ];
+  const action = {
+    type: 'TOGGLE_TODO',
+    id: 1
+  };
+
+  deepFreeze(before);
+  deepFreeze(action);
+  expect(todos(before, action)).toEqual(after);
+}
+
+testAddTodo();
+testToggleTodo();
 console.log("test passed!");
