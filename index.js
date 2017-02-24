@@ -1,7 +1,3 @@
-var expect = require('expect');
-var Redux = require('redux');
-var createStore = Redux.createStore;
-
 const counter = (state = 0, action) => {
   switch (action.type) {
     case 'INCREMENT':
@@ -13,13 +9,34 @@ const counter = (state = 0, action) => {
   }
 }
 
+const createStore = (reducer) => {
+  let state;
+  let listeners = [];
+
+  const getState = () => {
+    return state;
+  }
+
+  const dispatch = (action) => {
+    state = reducer(state, action);
+    listeners.forEach(listener => listener());
+  }
+
+  const subscribe = (listener) => {
+    listeners.push(listener);
+  }
+
+  dispatch({})
+
+  return { getState, dispatch, subscribe };
+}
+
 const store = createStore(counter);
 
-console.log(store.getState());
 
 store.dispatch({ type: 'INCREMENT' });
 
-console.log(store.getState());
+
 
 const render = () => {
   document.body.innerText = store.getState();
