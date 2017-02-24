@@ -1,18 +1,18 @@
 import expect from 'expect'
 import deepFreeze from 'deep-freeze'
 
-const addCounter = (list) => {
-  return list.concat([0]);
+const toggleTodo = (todo) => {
+  return Object.assign({}, todo, {
+    completed: !todo.completed
+  });
 }
 
-const testAddCounter = () => {
-  const listBefore = [];
-  const listAfter = [0];
-
-  deepFreeze(listBefore);
-
-  expect(addCounter(listBefore)).toEqual(listAfter);
+const testToggleTodo = () => {
+  const todoBefore = { completed: false }
+  const todoAfter = { completed: true }
+  deepFreeze(todoBefore);
+  expect(toggleTodo(todoBefore)).toEqual(todoAfter);
 }
 
-testAddCounter();
+testToggleTodo();
 console.log("test passed!");
