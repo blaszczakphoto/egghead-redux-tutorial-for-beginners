@@ -87,6 +87,31 @@ const getVisibleTodos = (todos, filter) => {
   }
 }
 
+const TodoList = ({todos, onClickTodo}) => (
+  <ul>
+    {todos.map(todo =>
+      <Todo
+        key={todo.id}
+        onClick={() => {
+          onClickTodo(todo.id)
+        }}
+        {...todo}
+      />
+    )}
+  </ul>
+)
+
+const Todo = ({title, completed, onClick}) => (
+  <li
+    onClick={onClick}
+    style={{
+      textDecoration: (completed) ? 'line-through' : 'none'
+    }}
+  >
+    {title}
+  </li>
+)
+
 let lastTodoId = 0;
 class TodoApp extends React.Component {
   render() {
@@ -107,24 +132,15 @@ class TodoApp extends React.Component {
         >
           Add todo
         </button>
-        <ul>
-          {visibleTodos.map(todo =>
-            <li
-              key={todo.id}
-              onClick={() => {
-                store.dispatch({
-                  type: 'TOGGLE_TODO',
-                  id: todo.id
-                });
-              }}
-              style={{
-                textDecoration: (todo.completed) ? 'line-through' : 'none'
-              }}
-            >
-              {todo.title}
-            </li>
-          )}
-        </ul>
+        <TodoList
+          todos={visibleTodos}
+          onClickTodo={(todoId) => {
+            store.dispatch({
+              type: 'TOGGLE_TODO',
+              id: todoId
+            })
+          }}
+        />
         <p>
           Show:
           {' '}
@@ -141,8 +157,8 @@ class TodoApp extends React.Component {
 
 const render = () => {
   ReactDOM.render(
-    <TodoApp 
-      {...store.getState()}
+    <TodoApp
+      {...store.getState() }
     />,
     document.getElementById('root')
   );
