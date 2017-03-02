@@ -1,7 +1,7 @@
 import { createStore, combineReducers } from 'redux'
 import ReactDOM from 'react-dom'
 import React from 'react'
-import { Provider } from 'react-redux'
+import { Provider, connect } from 'react-redux'
 
 const visibilityFilter = (state = 'SHOW_ALL', action) => {
   switch (action.type) {
@@ -69,9 +69,7 @@ const TodoList = ({ todos, onClickTodo }) => (
     {todos.map(todo =>
       <Todo
         key={todo.id}
-        onClick={() => {
-          onClickTodo(todo.id)
-        }}
+        onClick={() => onClickTodo(todo.id)}
         {...todo}
       />
     )}
@@ -191,57 +189,42 @@ const Footer = () => (
   </p>
 )
 
-class VisibleTodoList extends React.Component {
-  componentDidMount() {
-    let { store } = this.context;
-    this.unsubscribe = store.subscribe(() =>
-      this.forceUpdate()
-    );
-    store.dispatch({ type: 'ADD_TODO', title: 'ABCD', id: 100 })
-    store.dispatch({ type: 'ADD_TODO', title: 'YUIIO', id: 101 })
-    store.dispatch({ type: 'ADD_TODO', title: 'GHHJ', id: 102 })
-    store.dispatch({ type: 'TOGGLE_TODO', id: 102 })
-  }
-
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
-
-  render() {
-    let { store } = this.context;
-    const props = this.props;
-    const state = store.getState();
-
-    return (
-      <TodoList
-        todos={getVisibleTodos(state.todos, state.visibilityFilter)}
-        onClickTodo={(todoId) =>
-          store.dispatch({
-            type: 'TOGGLE_TODO',
-            id: todoId
-          })
-        }
-      />
-    )
-  }
+const mapStateToProps = (state) => {
+  return ({
+    todos: getVisibleTodos(state.todos, state.visibilityFilter)
+  })
 }
-VisibleTodoList.contextTypes = {
-  store: React.PropTypes.object
-}
+
+const mapDispatchToProps = (dispatch) => {
+  return ({
+    onClickTodo: (todoId) => {
+      dispatch({
+        type: 'TOGGLE_TODO',
+        id: todoId
+      })
+    }
+  })
+};
+
+const VisibleTodoList = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TodoList)
+
 
 let lastTodoId = 0;
 const TodoApp = () => (
   <div>
     <AddTodo />
-    <VisibleTodoList/>
-    <Footer/>
+    <VisibleTodoList />
+    <Footer />
   </div>
 );
 
 
 ReactDOM.render(
   <Provider store={createStore(todoApp)}>
-    <TodoApp/>
+    <TodoApp />
   </Provider>,
   document.getElementById('root')
 );
