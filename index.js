@@ -3,6 +3,31 @@ import ReactDOM from 'react-dom'
 import React from 'react'
 import { Provider, connect } from 'react-redux'
 
+
+
+let lastTodoId = 0;
+const addTodo = (title) => {
+  return {
+    type: 'ADD_TODO',
+    title,
+    id: lastTodoId++
+  }
+}
+
+const setVisibilityFilter = (filter) => {
+  return {
+    type: 'SET_VISIBILITY_FILTER',
+    filter: filter
+  }
+}
+
+const toggleTodo = (id) => {
+  return {
+    type: 'TOGGLE_TODO',
+    id: id
+  }
+}
+
 const visibilityFilter = (state = 'SHOW_ALL', action) => {
   switch (action.type) {
     case 'SET_VISIBILITY_FILTER':
@@ -94,11 +119,7 @@ let AddTodo = ({dispatch}) => {
       <input type="text" ref={(node) => { input = node; }} placeholder="todo title" />
       <button
         onClick={() => {
-          dispatch({
-            type: 'ADD_TODO',
-            title: input.value,
-            id: lastTodoId++
-          });
+          dispatch(addTodo(input.value));
           input.value = '';
         }}
       >
@@ -132,13 +153,12 @@ const mapStateToLinkProps = (state, ownProps) => {
   }
 }
 
+
+
 const mapDispatchToLinkProps = (dispatch, ownProps) => {
   return {
     onClick: () => {
-      dispatch({
-        type: 'SET_VISIBILITY_FILTER',
-        filter: ownProps.filter
-      })
+      dispatch(setVisibilityFilter(ownProps.filter))
     }
   }
 }
@@ -175,13 +195,12 @@ const mapStateToTodoListProps = (state) => {
   })
 }
 
+
+
 const mapDispatchToTodoListProps = (dispatch) => {
   return ({
     onClickTodo: (todoId) => {
-      dispatch({
-        type: 'TOGGLE_TODO',
-        id: todoId
-      })
+      dispatch(toggleTodo(todoId))
     }
   })
 };
@@ -192,7 +211,6 @@ const VisibleTodoList = connect(
 )(TodoList)
 
 
-let lastTodoId = 0;
 const TodoApp = () => (
   <div>
     <AddTodo />
