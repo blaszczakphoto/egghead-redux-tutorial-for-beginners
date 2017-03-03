@@ -87,14 +87,14 @@ const Todo = ({ title, completed, onClick }) => (
   </li>
 )
 
-const AddTodo = (props, { store }) => {
+let AddTodo = ({dispatch}) => {
   let input;
   return (
     <div>
       <input type="text" ref={(node) => { input = node; }} placeholder="todo title" />
       <button
         onClick={() => {
-          store.dispatch({
+          dispatch({
             type: 'ADD_TODO',
             title: input.value,
             id: lastTodoId++
@@ -107,9 +107,7 @@ const AddTodo = (props, { store }) => {
     </div>
   )
 }
-AddTodo.contextTypes = {
-  store: React.PropTypes.object
-}
+AddTodo = connect(null, null)(AddTodo);
 
 const Link = ({ active, children, onClick }) => {
   if (active) {
@@ -189,13 +187,13 @@ const Footer = () => (
   </p>
 )
 
-const mapStateToProps = (state) => {
+const mapStateToTodoListProps = (state) => {
   return ({
     todos: getVisibleTodos(state.todos, state.visibilityFilter)
   })
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToTodoListProps = (dispatch) => {
   return ({
     onClickTodo: (todoId) => {
       dispatch({
@@ -207,8 +205,8 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const VisibleTodoList = connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToTodoListProps,
+  mapDispatchToTodoListProps
 )(TodoList)
 
 
