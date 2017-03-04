@@ -4,21 +4,20 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import todoApp from './reducers'
 import TodoApp from './components/TodoApp'
+import { loadState, saveState } from './localStorage'
+import throttle from 'lodash/throttle'
 
-const persistedState = {
-  todos: [{
-    id: 1,
-    title: 'Narysować cebule',
-    completed: false,
-  },
-  {
-    id: 2,
-    title: 'Zjeść cebule',
-    completed: false,
-  }]
-}
 
+const persistedState = loadState();
+console.log("persistedState",persistedState);
 const store = createStore(todoApp, persistedState);
+
+
+store.subscribe(throttle(() => {
+  saveState({
+    todos: store.getState().todos,
+  });
+}, 1000));
 
 ReactDOM.render(
   <Provider store={store}>
