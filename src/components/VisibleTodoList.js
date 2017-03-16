@@ -23,15 +23,9 @@ const mapStateTodoProps = (state, { params }) => ({
   ),
 });
 
-const mapDispatchTodoProps = (dispatch) => ({
-  onClickTodo(todoId) {
-    dispatch(toggleTodo(todoId));
-  },
-});
-
 const VisibleTodoList = withRouter(connect(
   mapStateTodoProps,
-  mapDispatchTodoProps
+  { onClickTodo: toggleTodo }
 )(TodoList));
 
 export default VisibleTodoList;
