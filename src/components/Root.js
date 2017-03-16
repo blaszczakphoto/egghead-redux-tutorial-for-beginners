@@ -5,7 +5,7 @@ import { Router, Route, browserHistory } from 'react-router'
 
 const Root = ({ store }) => (
   <Provider store={store}>
-    <Router history={browserHistory}>  
+    <Router history={browserHistory}>
       <Route path='/(:filter)' component={TodoApp} />
     </Router>
   </Provider>
