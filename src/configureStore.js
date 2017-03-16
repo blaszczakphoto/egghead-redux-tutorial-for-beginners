@@ -1,33 +1,26 @@
 import { createStore } from 'redux';
 import todoApp from './reducers';
-import { loadState, saveState } from './localStorage';
-import throttle from 'lodash/throttle';
 
 const addLoggingToDispatch = (store) => {
   const rawDispatch = store.dispatch;
 
   return (action) => {
+    /* eslint-disable no-console */
     console.group(action.type);
     console.log('%c prev state', 'color: gray', store.getState());
     console.log('%c action', 'color: blue', action.type);
     const returnValue = rawDispatch(action);
     console.log('%c next state', 'color: gray', store.getState());
     console.groupEnd(action.type);
+    /* eslint-enable no-console */
     return returnValue;
   };
 };
 
 const configureStore = () => {
-  const persistedState = loadState();
-  const store = createStore(todoApp, persistedState);
+  const store = createStore(todoApp);
 
   store.dispatch = addLoggingToDispatch(store);
-
-  store.subscribe(throttle(() => {
-    saveState({
-      todos: store.getState().todos,
-    });
-  }, 1000));
 
   return store;
 };
