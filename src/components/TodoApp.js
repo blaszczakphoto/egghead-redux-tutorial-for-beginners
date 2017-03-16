@@ -1,7 +1,7 @@
-import React from 'react'
-import Footer from './Footer'
-import VisibleTodoList from './VisibleTodoList'
-import AddTodo from './AddTodo'
+import React, { PropTypes } from 'react';
+import Footer from './Footer';
+import VisibleTodoList from './VisibleTodoList';
+import AddTodo from './AddTodo';
 
 const TodoApp = () => (
   <div>
@@ -11,4 +11,9 @@ const TodoApp = () => (
   </div>
 );
 
+TodoApp.propTypes = {
+  params: PropTypes.shape({
+    filter: PropTypes.string,
+  }),
+};
 export default TodoApp;
