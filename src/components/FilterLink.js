@@ -1,5 +1,5 @@
-import React, { PropTypes } from 'react'
-import { Link } from 'react-router'
+import React, { PropTypes } from 'react';
+import { Link } from 'react-router';
 
 const FilterLink = ({ filter, children }) => (
   <Link
@@ -8,7 +8,7 @@ const FilterLink = ({ filter, children }) => (
   >
     {children}
   </Link>
-)
+);
 FilterLink.propTypes = {
   filter: PropTypes.oneOf(['all', 'completed', 'active']).isRequired,
   children: PropTypes.node.isRequired,

@@ -4,8 +4,8 @@ const todo = (state, action) => {
       return {
         id: action.id,
         title: action.title,
-        completed: false
-      }
+        completed: false,
+      };
     case 'TOGGLE_TODO':
       if (state.id !== action.id) {
         return state;
@@ -13,11 +13,11 @@ const todo = (state, action) => {
 
       return {
         ...state,
-        completed: !state.completed
+        completed: !state.completed,
       };
     default:
       return state;
   }
-}
+};
 
 export default todo;
