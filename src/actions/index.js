@@ -7,13 +7,6 @@ export const addTodo = (title) => ({
   id: generateUniqueId()
 })
 
-
-export const setVisibilityFilter = (filter) => ({
-  type: 'SET_VISIBILITY_FILTER',
-  filter: filter
-})
-
-
 export const toggleTodo = (id) => ({
   type: 'TOGGLE_TODO',
   id: id
