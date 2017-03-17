@@ -4,7 +4,6 @@ import TodoList from './TodoList';
 import * as actions from '../actions';
 import { withRouter } from 'react-router';
 import { getVisibleTodos } from '../reducers';
-import { fetchTodos } from '../api';
 
 
 class VisibleTodoList extends Component {
@@ -19,16 +18,12 @@ class VisibleTodoList extends Component {
   }
 
   fetchdata() {
-    const { filter, receiveTodos } = this.props;
-    fetchTodos(filter).then(todos =>
-      receiveTodos(filter, todos)
-    );
+    const { filter, fetchTodos } = this.props;
+    fetchTodos(filter);
   }
 
   render() {
     const { toggleTodo, ...rest } = this.props;
-    console.log('rest', rest);
-    console.log('toggleTodo', toggleTodo);
     return (
       <TodoList
         {...rest}
@@ -39,7 +34,7 @@ class VisibleTodoList extends Component {
 }
 VisibleTodoList.propTypes = {
   filter: PropTypes.string.isRequired,
-  receiveTodos: PropTypes.func.isRequired,
+  fetchTodos: PropTypes.func.isRequired,
   toggleTodo: PropTypes.func.isRequired,
 };
 
