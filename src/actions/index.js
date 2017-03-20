@@ -7,6 +7,11 @@ export const addTodo = (title) => ({
   id: generateUniqueId(),
 });
 
+export const requestTodos = (filter) => ({
+  type: 'REQUEST_TODOS',
+  filter,
+});
+
 export const toggleTodo = (id) => ({
   type: 'TOGGLE_TODO',
   id,
