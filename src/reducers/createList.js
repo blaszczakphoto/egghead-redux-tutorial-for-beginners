@@ -6,7 +6,13 @@ const createList = (filter) => {
       case 'FETCH_TODOS_SUCCESS':
         return (action.filter === filter) ? action.response.result : state;
       case 'ADD_TODO_SUCCESS':
-        return (action.filter !== 'completed') ? [...state, action.response.result] : state;
+        return (filter !== 'completed') ? [...state, action.response.result] : state;
+      case 'TOGGLE_TODO_SUCCESS': {
+        if (filter !== 'all') {
+          return state.filter(id => id !== action.response.result);
+        }
+        return state;
+      }
       default:
         return state;
     }
