@@ -1,12 +1,13 @@
-import { v4 as generateUniqueId } from 'node-uuid';
 import * as api from '../api';
 import { getIsFetching } from '../reducers';
 
-export const addTodo = (title) => ({
-  type: 'ADD_TODO',
-  title,
-  id: generateUniqueId(),
-});
+export const addTodo = (title) => (dispatch) =>
+  api.addTodo(title).then((response) => {
+    dispatch({
+      type: 'ADD_TODO_SUCCESS',
+      response,
+    });
+  });
 
 export const toggleTodo = (id) => ({
   type: 'TOGGLE_TODO',
